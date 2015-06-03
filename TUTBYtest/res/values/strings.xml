@@ -2,6 +2,19 @@
 <resources>
 
     <string name="app_name">TUTBYtest</string>
-    <string name="hello_world">Hello world!</string>
-
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    
+    <string-array name="drawer_items">
+        <item>Main</item>
+        <item>Settings</item>
+    </string-array>
+    
+    <string name="open_screen">Open screen</string>
+    <string name="clear_frequency">Clear frequency:</string>
+    <string name="theme">Theme:</string>
+	<string name="min">min</string>
+	<string name="blue_gray">Blue-gray</string>
+	<string name="orange">Orange</string>
+	<string name="theme_success">Theme successfully applied!</string>
 </resources>
