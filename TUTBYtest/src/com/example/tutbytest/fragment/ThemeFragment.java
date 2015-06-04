@@ -49,6 +49,7 @@ public class ThemeFragment extends BaseFragment {
 				}
 				Toast.makeText(getActivity(), getActivity().getString(R.string.theme_success),
 						Toast.LENGTH_SHORT).show();
+				getActivity().onBackPressed();
 			}
 		});
 		Button cancel = (Button) view.findViewById(R.id.cancel);
@@ -56,7 +57,7 @@ public class ThemeFragment extends BaseFragment {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity(), "What must do this button? O_o", Toast.LENGTH_SHORT).show();
+				getActivity().onBackPressed();
 			}
 		});
 		return view;
