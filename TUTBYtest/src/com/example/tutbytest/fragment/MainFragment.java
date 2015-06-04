@@ -111,6 +111,7 @@ public class MainFragment extends BaseFragment {
 			
 			@Override
 			public void run() {
+				if (listView == null) return;
 				listView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.main_item, stringList));				
 			}
 		});
