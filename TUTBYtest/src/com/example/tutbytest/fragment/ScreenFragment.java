@@ -14,6 +14,9 @@ import com.example.tutbytest.utils.Utils;
 
 public class ScreenFragment extends BaseFragment {
 
+	private final String DATE_KEY = "DATE_KEY";
+	private long date;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		setHasOptionsMenu(true);
@@ -22,13 +25,23 @@ public class ScreenFragment extends BaseFragment {
 		TextView currentDate = (TextView) view.findViewById(R.id.current_date);
 		Bundle args = getArguments();
 		if (args == null) {
-			long date = System.currentTimeMillis();
+			if (savedInstanceState == null) {
+				date = System.currentTimeMillis();
+				BackgroundService.get(getActivity()).addDate(date);
+			} else {
+				date = savedInstanceState.getLong(DATE_KEY);
+			}
 			currentDate.setText(Utils.convertDate(date));
-			BackgroundService.get(getActivity()).addDate(date);
 		} else {
 			currentDate.setText(args.getString(ScreenFragment.class.getSimpleName()));
 		}
 		return view;
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putLong(DATE_KEY, date);
 	}
 	
 	@Override
