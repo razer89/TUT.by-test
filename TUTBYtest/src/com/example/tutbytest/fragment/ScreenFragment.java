@@ -20,9 +20,14 @@ public class ScreenFragment extends BaseFragment {
 		((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		View view = inflater.inflate(R.layout.screen_fragment, null);
 		TextView currentDate = (TextView) view.findViewById(R.id.current_date);
-		long date = System.currentTimeMillis();
-		currentDate.setText(Utils.convertDate(date));
-		BackgroundService.get(getActivity()).addDate(date);
+		Bundle args = getArguments();
+		if (args == null) {
+			long date = System.currentTimeMillis();
+			currentDate.setText(Utils.convertDate(date));
+			BackgroundService.get(getActivity()).addDate(date);
+		} else {
+			currentDate.setText(args.getString(ScreenFragment.class.getSimpleName()));
+		}
 		return view;
 	}
 	

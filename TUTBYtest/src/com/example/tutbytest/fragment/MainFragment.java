@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -84,6 +86,18 @@ public class MainFragment extends BaseFragment {
 				eraseUpdater.startUpdate();
 			}
 		}).start();
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				String item = (String) listView.getAdapter().getItem(position);
+				Bundle args = new Bundle();
+				args.putString(ScreenFragment.class.getSimpleName(), item);
+				BaseFragment fragment = new ScreenFragment();
+				fragment.setArguments(args);
+				((MainActivity)getActivity()).changeFragment(fragment, true);
+			}
+		});
 		return view;
 	}
 	
