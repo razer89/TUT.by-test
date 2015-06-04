@@ -63,7 +63,7 @@ public class BackgroundService extends Service {
 		lastEraseTime = prefs.getLong(LAST_ERASE_TIME, -1);
 		eraseTimer = new EraseTimer();
 		eraseTimer.startEraseWithDelay(eraseDelay);
-		eraseOnStart();
+		eraseIfNeed();
 		instance = this;
 		synchronized (WAIT) {
 			WAIT.notifyAll();
@@ -72,15 +72,34 @@ public class BackgroundService extends Service {
 	
 	public void setEraseDelay(int delay) {
 		eraseDelay = delay;
-		//TODO: start timer to erase here
+		prefs.edit().putInt(ERASE_DELAY, delay);
+		eraseIfNeed();
+		eraseTimer.startEraseWithDelay(delay);
+	}
+	
+	public int getEraseDelay() {
+		return eraseDelay;
+	}
+	
+	private void setLastEraseTime(long time) {
+		lastEraseTime = time;
+		prefs.edit().putLong(LAST_ERASE_TIME, time);
 	}
 	
 	private void erase() {
+		setLastEraseTime(System.currentTimeMillis());
+		android.util.Log.d("logd", "erase()");
 		//TODO: erase here
 	}
 	
-	private void eraseOnStart() {
-		//TODO: erase, if need
+	private void eraseIfNeed() {
+		if (lastEraseTime == -1) {
+			setLastEraseTime(System.currentTimeMillis());
+			return;
+		}
+		if (System.currentTimeMillis() > lastEraseTime + eraseDelay) {
+			erase();
+		}
 	}
 
 	@Override

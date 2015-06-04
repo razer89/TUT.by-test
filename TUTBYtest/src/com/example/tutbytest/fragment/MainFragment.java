@@ -1,7 +1,6 @@
 package com.example.tutbytest.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,7 +10,7 @@ import android.widget.Button;
 import com.example.tutbytest.R;
 import com.example.tutbytest.activity.MainActivity;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends BaseFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -21,13 +20,14 @@ public class MainFragment extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				((MainActivity)getActivity()).setDrawerIndicatorEnabled(false);
-				Fragment screenFragment = new ScreenFragment();
-				getActivity().getSupportFragmentManager().beginTransaction()
-				.addToBackStack(ScreenFragment.class.getSimpleName())
-				.replace(R.id.content_frame, screenFragment).commit();
+				((MainActivity)getActivity()).changeFragment(new ScreenFragment(), true);
 			}
 		});
 		return view;
+	}
+
+	@Override
+	public String getTitle() {
+		return getString(R.string.app_name);
 	}
 }

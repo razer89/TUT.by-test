@@ -1,17 +1,16 @@
 package com.example.tutbytest.fragment;
 
-import com.example.tutbytest.R;
-import com.example.tutbytest.activity.MainActivity;
-
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class ScreenFragment extends Fragment {
+import com.example.tutbytest.R;
+import com.example.tutbytest.activity.MainActivity;
+
+public class ScreenFragment extends BaseFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,5 +29,10 @@ public class ScreenFragment extends Fragment {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public String getTitle() {
+		return getString(R.string.screen);
 	}
 }

@@ -1,9 +1,7 @@
 package com.example.tutbytest.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.tutbytest.R;
+import com.example.tutbytest.fragment.BaseFragment;
 import com.example.tutbytest.fragment.MainFragment;
 import com.example.tutbytest.fragment.SettingsFragment;
 import com.example.tutbytest.service.BackgroundService;
@@ -58,7 +57,13 @@ public class MainActivity extends AppCompatActivity {
     	ThemeUtil.setTheme(this);
         if (savedInstanceState == null) {
             selectItem(0);
-            BackgroundService.get(this);	// Start service
+            new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+		            BackgroundService.get(MainActivity.this);	// Start service
+				}
+			}).start();
         } else {
         	int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
         	if (backStackCount > 0) {
@@ -75,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectItem(int position) {
-        Fragment fragment = null;
+        BaseFragment fragment = null;
         
         switch (position) {
 		case 0:
@@ -86,14 +91,20 @@ public class MainActivity extends AppCompatActivity {
 			break;
 		}
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
+        changeFragment(fragment, false);
+        drawerList.setItemChecked(position, true);
+        drawerLayout.closeDrawer(drawerList);
+    }
+    
+    public void changeFragment(BaseFragment fragment, boolean addToBackStack) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (addToBackStack) {
+        	fragmentTransaction.addToBackStack(fragment.getBackStackTag());
+			setDrawerIndicatorEnabled(false);
+        }
+        fragmentTransaction
                        .replace(R.id.content_frame, fragment)
                        .commit();
-
-        drawerList.setItemChecked(position, true);
-        getSupportActionBar().setTitle(position == 0 ? getString(R.string.app_name) : drawerAdapter.getItem(position));
-        drawerLayout.closeDrawer(drawerList);
     }
     
     public void setDrawerBackgrondColor(int color) {
