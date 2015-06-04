@@ -1,5 +1,6 @@
 package com.example.tutbytest.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import com.example.tutbytest.R;
 import com.example.tutbytest.fragment.MainFragment;
 import com.example.tutbytest.fragment.SettingsFragment;
+import com.example.tutbytest.service.BackgroundService;
 import com.example.tutbytest.utils.ThemeUtil;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     	ThemeUtil.setTheme(this);
         if (savedInstanceState == null) {
             selectItem(0);
+            BackgroundService.get(this);	// Start service
         } else {
         	int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
         	if (backStackCount > 0) {
