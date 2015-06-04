@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.tutbytest.R;
 import com.example.tutbytest.activity.MainActivity;
+import com.example.tutbytest.service.BackgroundService;
 
 public class SettingsFragment extends BaseFragment {
 
@@ -22,6 +23,9 @@ public class SettingsFragment extends BaseFragment {
 		View view = inflater.inflate(R.layout.settings_fragment, null);
 		minutes = (TextView) view.findViewById(R.id.frequency);
 		SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar1);
+		int progress = BackgroundService.get(getActivity()).getEraseDelay() / 60000;
+		seekBar.setProgress(progress - 1);
+		minutes.setText("" + progress);
 		seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			
 			@Override
@@ -34,6 +38,7 @@ public class SettingsFragment extends BaseFragment {
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				if (fromUser) {
 					minutes.setText("" + (progress + 1));
+					BackgroundService.get(getActivity()).setEraseDelay((progress + 1) * 60000);
 				}
 			}
 		});
