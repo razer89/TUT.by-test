@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.example.tutbytest.utils.Utils;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -51,19 +53,33 @@ public class BackgroundService extends Service {
 		
 		private TimerTask task;
 		
-		public void startEraseWithDelay(int delay) {
-			android.util.Log.d("logd", "startEraseWithDelay()");
+		public void startEraseWithDelay(final int delay) {
 			if (task != null) {
 				task.cancel();
 			}
-			task = new TimerTask() {
-				
-				@Override
-				public void run() {
-					erase();
-				}
-			};
-			scheduleAtFixedRate(task, delay, eraseDelay);
+			long nextErase = lastEraseTime + eraseDelay;
+			long nextRealErase = System.currentTimeMillis() + eraseDelay;
+			boolean isRestarted = (nextRealErase - nextErase) > 100;
+			if (isRestarted) {
+				task = new TimerTask() {
+					
+					@Override
+					public void run() {
+						erase();
+						startEraseWithDelay(delay);
+					}
+				};
+				schedule(task, nextErase - System.currentTimeMillis());
+			} else {
+				task = new TimerTask() {
+					
+					@Override
+					public void run() {
+						erase();
+					}
+				};
+				scheduleAtFixedRate(task, delay, eraseDelay);
+			}
 		}
 	}
 	
@@ -126,6 +142,14 @@ public class BackgroundService extends Service {
 		for (BackgroundServiceListener listener : listeners) {
 			listener.onUpdate(DBHelper.getInstance().getAllDates());
 		}
+	}
+	
+	public ArrayList<Long> getAllDates() {
+		return DBHelper.getInstance().getAllDates();
+	}
+	
+	public String getNextEraseInfo() {
+		return "Last: " + Utils.convertDate(lastEraseTime) + ", next: " + Utils.convertSeconds(lastEraseTime + eraseDelay - System.currentTimeMillis());
 	}
 	
 	@Override

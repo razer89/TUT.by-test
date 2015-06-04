@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.tutbytest.R;
 import com.example.tutbytest.activity.MainActivity;
 import com.example.tutbytest.service.BackgroundService;
+import com.example.tutbytest.utils.Utils;
 
 public class ScreenFragment extends BaseFragment {
 
@@ -20,7 +21,7 @@ public class ScreenFragment extends BaseFragment {
 		View view = inflater.inflate(R.layout.screen_fragment, null);
 		TextView currentDate = (TextView) view.findViewById(R.id.current_date);
 		long date = System.currentTimeMillis();
-		currentDate.setText("" + date);
+		currentDate.setText(Utils.convertDate(date));
 		BackgroundService.get(getActivity()).addDate(date);
 		return view;
 	}

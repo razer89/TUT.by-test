@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         	fragmentTransaction.addToBackStack(fragment.getBackStackTag());
 			setDrawerIndicatorEnabled(false);
         }
+        drawerLayout.setDrawerLockMode(addToBackStack ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
         fragmentTransaction
                        .replace(R.id.content_frame, fragment)
                        .commit();
@@ -127,5 +128,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
     	super.onBackPressed();
     	setDrawerIndicatorEnabled(true);
+    	drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 }

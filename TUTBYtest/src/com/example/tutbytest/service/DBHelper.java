@@ -61,7 +61,6 @@ public class DBHelper extends SQLiteOpenHelper {
 	}
 	
 	public void eraseDB() {
-		android.util.Log.d("logd", "eraseDB()");
 		getWritableDatabase().delete(DB_NAME, null, null);
 	}
 
