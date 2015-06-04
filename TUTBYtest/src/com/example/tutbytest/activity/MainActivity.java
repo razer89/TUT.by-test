@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 	private ActionBarDrawerToggle toggler;
 	private ListView drawerList;
 	private ArrayAdapter<String> drawerAdapter;
+	private int lastDrawerPosition = -1;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectItem(int position) {
+    	if (lastDrawerPosition == position) {
+    		drawerLayout.closeDrawer(drawerList);
+    		return;
+    	}
         BaseFragment fragment = null;
         
         switch (position) {
@@ -94,10 +99,12 @@ public class MainActivity extends AppCompatActivity {
         changeFragment(fragment, false);
         drawerList.setItemChecked(position, true);
         drawerLayout.closeDrawer(drawerList);
+        lastDrawerPosition = position;
     }
     
     public void changeFragment(BaseFragment fragment, boolean addToBackStack) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         if (addToBackStack) {
         	fragmentTransaction.addToBackStack(fragment.getBackStackTag());
 			setDrawerIndicatorEnabled(false);
